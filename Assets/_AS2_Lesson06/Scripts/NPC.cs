@@ -25,12 +25,13 @@ public class NPC : MonoBehaviour
          * プレイヤーが近くにいるときはプレイヤーを追いかける
          * 一定距離離れると巡回に戻る
          */
+        ResetPatrol();
 
         if(FinishNavigation())
         {
             NextPoint();  // 次の巡回ポイントを設定
         }
-
+        
         SearchPlayer();  // プレイヤーを探して追跡
     }
 
@@ -88,12 +89,15 @@ public class NPC : MonoBehaviour
         {
             TargetPoint = player.transform;  // 目的地を Player に設定
         }
-        else
-        {
-            NextPoint();  // 巡回ポイントに戻る
-        }
 
         // NavMeshAgentコンポーネントの目的地を設定
         Agent.SetDestination(TargetPoint.position);
+    }
+
+
+    public void ResetPatrol()
+    {
+        TargetPoint = PatrolPoints[_currentPatrolIndex % PatrolPoints.Length];  // 巡回ポイントの最初の番号を設定
+        Agent.SetDestination(TargetPoint.position);  // NavMeshAgentコンポーネントの目的地を設定
     }
 }
